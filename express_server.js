@@ -25,9 +25,16 @@ app.use(bodyParser.urlencoded({
 }));
 
 let urlDatabase = {
-  "bxVn2": "http://www.lighthouselabs.ca",
+  "BnfXle": "http://www.facebook.com",
+  "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+app.get("/u/:shortURL", (req, res) => {
+  let shortURL = req.params.shortURL;
+  let longURL = urlDatabase[shortURL];
+  res.redirect(longURL);
+});
 // add new route handler for "/urls"
 app.get("/urls", (req, res) => {
   // passing URL data to template
