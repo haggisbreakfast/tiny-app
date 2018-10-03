@@ -17,6 +17,15 @@ app.get("/urls", (req, res) => {
   // look in views folder for view
   res.render("urls_index", templateVars);
 });
+// add new route to urls_show
+app.get("/urls/:id", (req, res) => {
+  let templateVars = {
+    // shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id]
+  };
+  res.render("urls_show", templateVars);
+});
+
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
