@@ -6,6 +6,7 @@ app.set("view engine", "ejs");
 
 const bodyParser = require("body-parser");
 
+// Generate random string function
 function generateRandomString(digits) {
   //Solution from https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
   var string = '';
@@ -29,7 +30,7 @@ let urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
-// short url endpoint
+// redirect request
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   let longURL = urlDatabase[shortURL];
@@ -44,6 +45,12 @@ app.get("/urls", (req, res) => {
   // look in views folder for view
   res.render("urls_index", templateVars);
 });
+// // handle delete form in urls_index.ejs
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id]
+  res.redirect("/urls");
+})
+
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
