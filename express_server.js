@@ -4,6 +4,11 @@ let PORT = 8080;
 
 app.set("view engine", "ejs");
 
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
 let urlDatabase = {
   "bxVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -16,6 +21,9 @@ app.get("/urls", (req, res) => {
   };
   // look in views folder for view
   res.render("urls_index", templateVars);
+});
+app.get("/urls/new", (req, res) => {
+  res.render("urls_new");
 });
 // add new route to urls_show
 app.get("/urls/:id", (req, res) => {
