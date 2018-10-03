@@ -5,6 +5,21 @@ let PORT = 8080;
 app.set("view engine", "ejs");
 
 const bodyParser = require("body-parser");
+
+function generateRandomString(digits) {
+  //Solution from https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+  var string = '';
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < digits; i++) {
+    string += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+
+  return string;
+}
+console.log(generateRandomString(6));
+
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -24,6 +39,11 @@ app.get("/urls", (req, res) => {
 });
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
+});
+
+app.post("/urls", (req, res) => {
+  console.log(req.body);
+  res.send("ok");
 });
 // add new route to urls_show
 app.get("/urls/:id", (req, res) => {
@@ -48,3 +68,5 @@ app.get("/hello", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
+
+// let urlDatabase = req.body.longURL;
