@@ -34,6 +34,7 @@ let urlDatabase = {
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   let longURL = urlDatabase[shortURL];
+  // redirect to long URL
   res.redirect(longURL);
 });
 // add new route handler for "/urls"
