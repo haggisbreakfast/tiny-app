@@ -13,10 +13,14 @@
 <h1>
   URLS
 </h1>
+<!-- update operation - update existing shortened urls  -->
+<form method="POST" action="/urls/<%=shortURL%>/update">
+  <input type="text" value="<%= longURL %>" name="newURL" />
+  <button type="submit" class="btn btn-primary">Update</button>
+</form>
 <ul>
   <a href=>
     <%=longURL%>
-
   </a>
 </ul>
 

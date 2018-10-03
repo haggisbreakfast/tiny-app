@@ -30,12 +30,14 @@ let urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
 // redirect request
 app.get("/u/:shortURL", (req, res) => {
-  let shortURL = req.params.shortURL;
+  let shortURL = req.params.shortUL;
   let longURL = urlDatabase[shortURL];
   // redirect to long URL
   res.redirect(longURL);
+
 });
 // add new route handler for "/urls"
 app.get("/urls", (req, res) => {
@@ -45,11 +47,19 @@ app.get("/urls", (req, res) => {
   };
   // look in views folder for view
   res.render("urls_index", templateVars);
+
 });
 // // handle delete form in urls_index.ejs
 app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id]
   res.redirect("/urls");
+})
+// handle update button
+app.post("/urls/:id/update", (req, res) => {
+  //
+  let shortUrl = req.params.id;
+  urlDatabase[shortUrl] = req.body.newURL;
+  res.redirect("/urls/" + shortUrl)
 })
 
 app.get("/urls/new", (req, res) => {
@@ -63,7 +73,7 @@ app.post("/urls", (req, res) => {
 // add new route to urls_show
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
-    // shortURL: req.params.id,
+    shortURL: req.params.id,
     longURL: urlDatabase[req.params.id]
   };
   res.render("urls_show", templateVars);
