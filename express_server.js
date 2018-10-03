@@ -8,6 +8,21 @@ let urlDatabase = {
   "bxVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+// add new route handler for "/urls"
+app.get("/urls", (req, res) => {
+  // passing URL data to template
+  let templateVars = {
+    urls: urlDatabase
+  };
+  // look in views folder for view
+  res.render("urls_index", templateVars);
+});
+app.get("/", (req, res) => {
+  res.send("Hello!");
+});
+app.get("/urls.json", (req, res) => {
+  res.json(urlDatabase);
+});
 
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");

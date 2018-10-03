@@ -1,0 +1,31 @@
+<!-- get urls form express_server.js -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+
+  <!-- display list or table of URLS and shortened form -->
+
+  <h1>URLS</h1>
+  <ul>
+    <!-- for in loop to loop over url object -->
+    <% for (var i in urls) { %>
+    <li>
+      <a href='#'>
+        <%= urls[i] %> </a>
+      <%= i %>
+    </li>
+    <% } %>
+  </ul>
+</body>
+
+</html>
