@@ -16,7 +16,6 @@
 
 
   <!-- display list of URLS and shortened form -->
-
   <h1>URLS</h1>
   <ul>
     <!-- for in loop to loop over url object -->
@@ -24,11 +23,16 @@
     <li>
       <a href='#'>
         <%= urls[i] %> </a>
+      <!-- i = shortURLS(keys) -->
       <%= i %>
+      <!-- add edit links for each  -->
+      <a href="/urls/<%=i%>"> Edit </a>
+
       <!-- adding delete button form -->
       <form method="POST" action="/urls/<%=i%>/delete">
         <button type="submit" class="btn btn-primary">Delete</button>
-      </form>
+
+
     </li>
     <% } %>
   </ul>

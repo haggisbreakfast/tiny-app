@@ -56,10 +56,10 @@ app.post("/urls/:id/delete", (req, res) => {
 })
 // handle update button
 app.post("/urls/:id/update", (req, res) => {
-  //
+
   let shortUrl = req.params.id;
   urlDatabase[shortUrl] = req.body.newURL;
-  res.redirect("/urls/" + shortUrl)
+  res.redirect("/urls");
 })
 
 app.get("/urls/new", (req, res) => {
