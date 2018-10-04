@@ -1,10 +1,10 @@
 let express = require("express");
 let app = express();
 let PORT = 8080;
-let cookieParser = require('cookie-parser')
+let cookieParser = require('cookie-parser');
 
 app.set("view engine", "ejs");
-app.use(cookieParser())
+app.use(cookieParser());
 
 const bodyParser = require("body-parser");
 
@@ -13,27 +13,35 @@ function generateRandomString(digits) {
   //Solution from https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
   var string = '';
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
   for (var i = 0; i < digits; i++) {
     string += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-
+  };
   return string;
-}
+};
 console.log(generateRandomString(6));
 
-
+// body parser
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+// define url database with short url/long url key value pairs
 let urlDatabase = {
   "BnfXle": "http://www.facebook.com",
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
-// redirect request
+// get registration page requets
+app.get("/register", (req, res) => {
+  let templateVars = {
+    username: req.cookies["username"]
+  }
+  // render registration page w/ empty form
+  res.render("registration", templateVars);
+});
+
+// // redirect request
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   let longURL = urlDatabase[shortURL];
@@ -41,7 +49,7 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 
 });
-// add new route handler for "/urls"
+// add route for "/urls"
 app.get("/urls", (req, res) => {
   // passing URL data to template
   let templateVars = {
@@ -59,7 +67,6 @@ app.post("/urls/:id/delete", (req, res) => {
 })
 // handle update button
 app.post("/urls/:id/update", (req, res) => {
-
   let shortUrl = req.params.id;
   urlDatabase[shortUrl] = req.body.newURL;
   res.redirect("/urls");
@@ -97,7 +104,7 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  res.send("Hello!!");
 });
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
