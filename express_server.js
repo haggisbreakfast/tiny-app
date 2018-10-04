@@ -33,7 +33,7 @@ let urlDatabase = {
 
 // redirect request
 app.get("/u/:shortURL", (req, res) => {
-  let shortURL = req.params.shortUL;
+  let shortURL = req.params.shortURL;
   let longURL = urlDatabase[shortURL];
   // redirect to long URL
   res.redirect(longURL);
