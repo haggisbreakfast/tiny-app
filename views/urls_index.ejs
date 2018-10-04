@@ -21,7 +21,7 @@
     <!-- for in loop to loop over url object -->
     <% for (var i in urls) { %>
     <li>
-      <a href='#'>
+      <a href='<%= urls[i] %>'>
         <%= urls[i] %> </a>
       <!-- i = shortURLS -->
       <%= i %>
