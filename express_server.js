@@ -45,7 +45,8 @@ app.get("/u/:shortURL", (req, res) => {
 app.get("/urls", (req, res) => {
   // passing URL data to template
   let templateVars = {
-    urls: urlDatabase
+    urls: urlDatabase,
+    username: req.cookies["username"]
   };
   // look in views folder for view
   res.render("urls_index", templateVars);
@@ -70,15 +71,18 @@ app.post("/login", (req, res) => {
   // redirect to /urls page after
   res.redirect("/urls")
 });
-
-// app.get("/login",(req,res)=>{
-
-// });
-
-app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+// handle logout request
+app.post("/logout", (req, res) => {
+  res.clearCookie("username");
+  res.redirect("/urls")
 });
 
+app.get("/urls/new", (req, res) => {
+  let templateVars = {
+    username: req.cookies["username"]
+  }
+  res.render("urls_new", templateVars);
+});
 app.post("/urls", (req, res) => {
   console.log(req.body);
   res.send("ok");
@@ -92,18 +96,15 @@ app.get("/urls/:id", (req, res) => {
   };
   res.render("urls_show", templateVars);
 });
-
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
-
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
-
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
