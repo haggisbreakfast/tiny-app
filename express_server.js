@@ -32,6 +32,20 @@ let urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+// add user database
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+  "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
+
 // get registration page requets
 app.get("/register", (req, res) => {
   let templateVars = {
@@ -40,6 +54,14 @@ app.get("/register", (req, res) => {
   // render registration page w/ empty form
   res.render("registration", templateVars);
 });
+
+// post request to post data to /register
+app.post("/register", (req, res) => {
+  // let templateVars = {
+  //   username: req.cookies["username"]
+  // }
+  res.redirect("/urls")
+})
 
 // // redirect request
 app.get("/u/:shortURL", (req, res) => {
