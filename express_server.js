@@ -57,19 +57,11 @@ app.get("/urls", (req, res) => {
     urls: urlDatabase,
     user_id: users[req.cookies["user_id"]]
   };
-  // look in views folder for view
+  console.log("before rendering on index page")
+  console.log(urlDatabase);
   res.render("urls_index", templateVars);
 });
-// add new route to urls_show
-app.get("/urls/:id", (req, res) => {
-  let templateVars = {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
-    user_id: users[req.cookies["user_id"]],
-  };
-  res.render("urls_show", templateVars);
-});
-
+// route to render urls/new page
 app.get("/urls/new", (req, res) => {
   let templateVars = {
     user_id: users[req.cookies["user_id"]]
@@ -82,6 +74,15 @@ app.get("/urls/new", (req, res) => {
     // otherwise direct to login page
     res.render("login");
   }
+});
+// add new route to urls_show
+app.get("/urls/:id", (req, res) => {
+  let templateVars = {
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id],
+    user_id: users[req.cookies["user_id"]],
+  };
+  res.render("urls_show", templateVars);
 });
 
 
@@ -106,10 +107,14 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login");
 });
-
+// handles submitted URLs
 app.post("/urls", (req, res) => {
-  console.log(req.body);
-  res.send("ok");
+  //capture the long URL :
+  console.log("we are in app.post");
+  let longURL = req.body.longURL;
+  let shortURL = generateRandomString();
+  urlDatabase[shortURL] = longURL;
+  res.redirect("/urls");
 });
 
 // // handle delete form in urls_index.ejs
