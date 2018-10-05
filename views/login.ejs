@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- if username form filled out, display username -->
+  <%if (username) { %>
+  <%= username %>
+  <form method="POST" action="/logout">
+    <!-- input for logout button -->
+    <button type="submit" class="btn btn-primary">logout</button>
+  </form>
+  <%} else { %>
+  <form method="POST" action="/login">
+    <!-- input for login field and button -->
+    <input type="text" name="username" />
+    <button type="submit" class="btn btn-primary">login</button>
+  </form>
+  <% } %>
+
+</body>
+
+</html>
