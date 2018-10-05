@@ -20,8 +20,6 @@ function generateRandomString(digits) {
   return string;
 };
 console.log(generateRandomString(6));
-
-
 // body parser
 app.use(bodyParser.urlencoded({
   extended: true
@@ -33,7 +31,6 @@ let urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
-
 // add user database
 const users = {
   "userRandomID": {
@@ -47,8 +44,7 @@ const users = {
     password: "dishwasher-funk"
   }
 };
-
-// get registration page requets
+// get registration page request
 app.get("/register", (req, res) => {
   let templateVars = {
     username: req.cookies["username"]
@@ -67,23 +63,27 @@ app.post("/register", (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   let randomId = generateRandomString(6);
+  // conditional statement for handling registration errors
+  for (let property in users) {
+    if (email === users[property].email) {
+      res.status(400).send("Email already assigned to a User ID.");
+      return
+    }
+  }
+  if (!email || !password) {
+    res.status(400).send("Please enter email and password")
+    return
+  }
+  // adding randomId to users object
   users[randomId] = {
     id: randomId,
     email: email,
     password: password
   };
   console.log(users);
-  // conditional statement for handling registration errors
-  if (!email || !password) {
-    res.status(400).send("Please enter email and password");
-  }
-  for (var i in users) {
-    if (users[randomId].email === users[i].email) {
-      res.status(400).send("Email already assigned to a User ID.");
-    }
-  }
+
   // set cookies
-  res.cookie("user_id", users[randomId]);
+  res.cookie("user_id", randomId);
   res.redirect("/urls")
 })
 
