@@ -17,13 +17,16 @@
 
 
   <!-- if user_id form filled out, display user_id -->
-  <%if (user_id) { %>
-  <%= user_id %>
-  <form method="POST" action="/logout">
-    <!-- input for logout button -->
-    <button type="submit" class="btn btn-primary">logout</button>
-  </form>
-  <% } else { %>
+  <h2>
+    <%if (user_id) { %>
+    <%= user_id["email"] %>
+    <form method="POST" action="/logout">
+      <!-- input for logout button -->
+      <button type="submit" class="btn btn-primary">logout</button>
+    </form>
+    <% } else { %>
+  </h2>
+
   <!-- REGISTER BUTTON  -->
   <form method="GET" action="/register">
     <button type="submit" class="btn btn-primary">REGISTER</button>

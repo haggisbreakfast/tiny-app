@@ -5,27 +5,34 @@
   <% include partials/_header %>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>URLS</title>
+  <title>SHORT URL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <h1>
-  SHORT URLS
+  SHORT URL
 </h1>
+<!-- let templateVars = {
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id],
+    user_id: users[req.cookies["user_id"]],
+  }; -->
 <!-- update operation - update existing shortened urls  -->
 <form method="POST" action="/urls/<%=shortURL%>/update">
   <!-- input for update button -->
-  <!-- longURL: urlDatabase[req.params.id] -->
   <input type="text" value="<%= longURL %>" name="newURL" />
   <button type="submit" class="btn btn-primary">Update</button>
 </form>
-<ul>
-  <a href=>
-    <%=longURL%>
-  </a>
-</ul>
 
 <body>
+  <ul>
+    <li> Long URL:
+      <%=longURL%>
+    </li>
+    <li> Short URL:
+      <%=shortURL%>
+    </li>
 
+  </ul>
 </body>
 
 </html>

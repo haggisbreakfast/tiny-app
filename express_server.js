@@ -47,12 +47,12 @@ const users = {
 
 // ************** ROUTES ****************
 app.get("/", (req, res) => {
-  res.send("Hello!!");
+  res.send("Hello!");
 });
 
 // add route for /urls page
 app.get("/urls", (req, res) => {
-  // pass URL data to template
+  // pass URL database to template
   let templateVars = {
     urls: urlDatabase,
     user_id: users[req.cookies["user_id"]]
@@ -60,14 +60,6 @@ app.get("/urls", (req, res) => {
   // look in views folder for view
   res.render("urls_index", templateVars);
 });
-
-app.get("/urls/new", (req, res) => {
-  let templateVars = {
-    user_id: users[req.cookies["user_id"]]
-  }
-  res.render("urls_new", templateVars);
-});
-
 // add new route to urls_show
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
@@ -77,6 +69,22 @@ app.get("/urls/:id", (req, res) => {
   };
   res.render("urls_show", templateVars);
 });
+
+app.get("/urls/new", (req, res) => {
+  let templateVars = {
+    user_id: users[req.cookies["user_id"]]
+  }
+  // if user exists and is logged in
+  if (users[req.cookies["user_id"]]) {
+    // then render urls_new page
+    res.render("urls_new", templateVars);
+  } else {
+    // otherwise direct to login page
+    res.render("login");
+  }
+});
+
+
 
 // redirect request
 app.get("/u/:shortURL", (req, res) => {
@@ -138,12 +146,12 @@ app.post("/login", (req, res) => {
       res.redirect("/urls")
       // if password no match, too bad
     } else {
-      res.status(403).send("add msg l88888r")
+      res.status(403).send("incorrect password!")
       return
     }
     // if email doesnt exist, too bad
   } else {
-    res.status(403).send("add msg l8r")
+    res.status(403).send("non-existent email entered!")
     return
   }
 
@@ -176,7 +184,6 @@ app.post("/register", (req, res) => {
     email: email,
     password: password
   };
-  console.log(users);
   // set cookies
   res.cookie("user_id", userID);
   res.redirect("/urls")
