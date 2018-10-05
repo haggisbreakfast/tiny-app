@@ -6,8 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Page Title</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-  <script src="main.js"></script>
 </head>
 
 <body>
@@ -19,21 +17,15 @@
 
   <!-- REGISTER BUTTON  -->
   <form method="GET" action="/register">
-    <button type="submit" class="btn btn-primary">REGISTER!!!!!!!!!</button>
+    <button type="submit" class="btn btn-primary">REGISTER</button>
   </form>
 
   <!-- if username form filled out, display username -->
-  <%if (username) { %>
-  <%= username %>
+  <%if (user_id) { %>
+  <%= user_id %>
   <form method="POST" action="/logout">
     <!-- input for logout button -->
     <button type="submit" class="btn btn-primary">logout</button>
-  </form>
-  <%} else { %>
-  <form method="POST" action="/login">
-    <!-- input for login field and button -->
-    <input type="text" name="username" />
-    <button type="submit" class="btn btn-primary">login</button>
   </form>
   <% } %>
 

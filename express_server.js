@@ -45,7 +45,7 @@ const users = {
   }
 };
 
-// ROUTES
+// ************** ROUTES ****************
 app.get("/", (req, res) => {
   res.send("Hello!!");
 });
@@ -55,7 +55,7 @@ app.get("/urls", (req, res) => {
   // pass URL data to template
   let templateVars = {
     urls: urlDatabase,
-    user_id: req.cookies["user_id"]
+    user_id: users[req.cookies["user_id"]]
   };
   // look in views folder for view
   res.render("urls_index", templateVars);
@@ -63,7 +63,7 @@ app.get("/urls", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   let templateVars = {
-    user_id: req.cookies["user_id"]
+    user_id: users[req.cookies["user_id"]]
   }
   res.render("urls_new", templateVars);
 });
@@ -73,7 +73,7 @@ app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
-    user_id: req.cookies["user_id"],
+    user_id: users[req.cookies["user_id"]],
   };
   res.render("urls_show", templateVars);
 });
@@ -93,6 +93,10 @@ app.get("/register", (req, res) => {
   }
   // return registration page w/ empty form
   res.render("registration", templateVars);
+});
+
+app.get("/login", (req, res) => {
+  res.render("login");
 });
 
 app.post("/urls", (req, res) => {
@@ -130,7 +134,7 @@ app.post("/register", (req, res) => {
   // console.log(req.body.email); = EMAIL
   let email = req.body.email;
   let password = req.body.password;
-  let randomId = generateRandomString(6);
+  let userID = generateRandomString(6);
   // conditional statement for handling registration errors
   for (let property in users) {
     if (email === users[property].email) {
@@ -142,15 +146,15 @@ app.post("/register", (req, res) => {
     res.status(400).send("Please enter email and password")
     return
   }
-  // adding randomId to users object
-  users[randomId] = {
-    id: randomId,
+  // adding userID to users object
+  users[userID] = {
+    id: userID,
     email: email,
     password: password
   };
   console.log(users);
   // set cookies
-  res.cookie("user_id", randomId);
+  res.cookie("user_id", userID);
   res.redirect("/urls")
 })
 
