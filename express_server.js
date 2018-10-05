@@ -1,13 +1,16 @@
-let express = require("express");
-let app = express();
-let PORT = 8080;
-let cookieParser = require('cookie-parser');
+const express = require("express");
+const app = express();
+const PORT = 8080;
+const cookieParser = require('cookie-parser');
+const bodyParser = require("body-parser");
 
 app.set("view engine", "ejs");
 app.use(cookieParser());
 
-const bodyParser = require("body-parser");
-
+// body parser
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 // Generate random string function
 function generateRandomString(digits) {
@@ -20,12 +23,6 @@ function generateRandomString(digits) {
   return string;
 };
 console.log(generateRandomString(6));
-
-
-// body parser
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
 
 // define url database with short url/long url key value pairs
 let urlDatabase = {
@@ -48,13 +45,80 @@ const users = {
   }
 };
 
-// get registration page requets
+// ROUTES
+app.get("/", (req, res) => {
+  res.send("Hello!!");
+});
+
+// add route for /urls page
+app.get("/urls", (req, res) => {
+  // pass URL data to template
+  let templateVars = {
+    urls: urlDatabase,
+    user_id: req.cookies["user_id"]
+  };
+  // look in views folder for view
+  res.render("urls_index", templateVars);
+});
+
+app.get("/urls/new", (req, res) => {
+  let templateVars = {
+    user_id: req.cookies["user_id"]
+  }
+  res.render("urls_new", templateVars);
+});
+
+// add new route to urls_show
+app.get("/urls/:id", (req, res) => {
+  let templateVars = {
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id],
+    user_id: req.cookies["user_id"],
+  };
+  res.render("urls_show", templateVars);
+});
+
+// redirect request
+app.get("/u/:shortURL", (req, res) => {
+  let shortURL = req.params.shortURL;
+  let longURL = urlDatabase[shortURL];
+  // redirect to long URL
+  res.redirect(longURL);
+});
+
+// get registration page request
 app.get("/register", (req, res) => {
   let templateVars = {
-    username: req.cookies["username"]
+    user_id: req.cookies["user_id"]
   }
   // return registration page w/ empty form
   res.render("registration", templateVars);
+});
+
+app.post("/urls", (req, res) => {
+  console.log(req.body);
+  res.send("ok");
+});
+
+// // handle delete form in urls_index.ejs
+app.post("/urls/:id/delete", (req, res) => {
+  delete urlDatabase[req.params.id]
+  res.redirect("/urls");
+})
+
+// handle update button
+app.post("/urls/:id/update", (req, res) => {
+  let shortUrl = req.params.id;
+  urlDatabase[shortUrl] = req.body.newURL;
+  res.redirect("/urls");
+})
+
+// handle login request
+app.post("/login", (req, res) => {
+  // set cookie to be called user_id to value submitted
+  res.cookie("user_id", req.body.user_id);
+  // redirect to /urls page after
+  res.redirect("/urls")
 });
 
 // request to post data to /register
@@ -67,91 +131,36 @@ app.post("/register", (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   let randomId = generateRandomString(6);
+  // conditional statement for handling registration errors
+  for (let property in users) {
+    if (email === users[property].email) {
+      res.status(400).send("Email already assigned to a User ID.");
+      return
+    }
+  }
+  if (!email || !password) {
+    res.status(400).send("Please enter email and password")
+    return
+  }
+  // adding randomId to users object
   users[randomId] = {
     id: randomId,
     email: email,
     password: password
   };
   console.log(users);
-  // conditional statement for handling registration errors
-  if (!email || !password) {
-    res.status(400).send("Please enter email and password");
-  }
-  for (var i in users) {
-    if (users[randomId].email === users[i].email) {
-      res.status(400).send("Email already assigned to a User ID.");
-    }
-  }
   // set cookies
-  res.cookie("user_id", users[randomId]);
+  res.cookie("user_id", randomId);
   res.redirect("/urls")
 })
 
-// // redirect request
-app.get("/u/:shortURL", (req, res) => {
-  let shortURL = req.params.shortURL;
-  let longURL = urlDatabase[shortURL];
-  // redirect to long URL
-  res.redirect(longURL);
-
-});
-// add route for /urls page
-app.get("/urls", (req, res) => {
-  // pass URL data to template
-  let templateVars = {
-    urls: urlDatabase,
-    username: req.cookies["username"]
-  };
-  // look in views folder for view
-  res.render("urls_index", templateVars);
-
-});
-// // handle delete form in urls_index.ejs
-app.post("/urls/:id/delete", (req, res) => {
-  delete urlDatabase[req.params.id]
-  res.redirect("/urls");
-})
-// handle update button
-app.post("/urls/:id/update", (req, res) => {
-  let shortUrl = req.params.id;
-  urlDatabase[shortUrl] = req.body.newURL;
-  res.redirect("/urls");
-})
-// handle login request
-app.post("/login", (req, res) => {
-  // set cookie to be called username to value submitted
-  res.cookie("username", req.body.username);
-  // redirect to /urls page after
-  res.redirect("/urls")
-});
 // handle logout request
 app.post("/logout", (req, res) => {
-  res.clearCookie("username");
+  res.clearCookie("user_id");
   res.redirect("/urls")
 });
 
-app.get("/urls/new", (req, res) => {
-  let templateVars = {
-    username: req.cookies["username"]
-  }
-  res.render("urls_new", templateVars);
-});
-app.post("/urls", (req, res) => {
-  console.log(req.body);
-  res.send("ok");
-});
-// add new route to urls_show
-app.get("/urls/:id", (req, res) => {
-  let templateVars = {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
-    username: req.cookies["username"],
-  };
-  res.render("urls_show", templateVars);
-});
-app.get("/", (req, res) => {
-  res.send("Hello!!");
-});
+
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
