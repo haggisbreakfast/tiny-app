@@ -8,6 +8,7 @@ app.use(cookieParser());
 
 const bodyParser = require("body-parser");
 
+
 // Generate random string function
 function generateRandomString(digits) {
   //Solution from https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
@@ -19,6 +20,7 @@ function generateRandomString(digits) {
   return string;
 };
 console.log(generateRandomString(6));
+
 
 // body parser
 app.use(bodyParser.urlencoded({
@@ -44,22 +46,37 @@ const users = {
     email: "user2@example.com",
     password: "dishwasher-funk"
   }
-}
+};
 
 // get registration page requets
 app.get("/register", (req, res) => {
   let templateVars = {
     username: req.cookies["username"]
   }
-  // render registration page w/ empty form
+  // return registration page w/ empty form
   res.render("registration", templateVars);
 });
 
-// post request to post data to /register
+// request to post data to /register
 app.post("/register", (req, res) => {
-  // let templateVars = {
-  //   username: req.cookies["username"]
-  // }
+  console.log('sup');
+  // req.body={email:____, password: ____}
+  // let shortUrl = req.params.id;
+  // urlDatabase[shortUrl] = req.body.newURL;
+  // console.log(req.params.body); = UNDEFINED
+  // console.log(req.body.email); = EMAIL
+  let email = req.body.email;
+  let password = req.body.password;
+  let randomId = generateRandomString(6);
+  users[randomId] = {
+    id: randomId,
+    email: email,
+    password: password
+  };
+  console.log(users);
+  // set cookies
+  res.cookie("user_id", users[randomId]);
+
   res.redirect("/urls")
 })
 
@@ -71,9 +88,9 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 
 });
-// add route for "/urls"
+// add route for /urls page
 app.get("/urls", (req, res) => {
-  // passing URL data to template
+  // pass URL data to template
   let templateVars = {
     urls: urlDatabase,
     username: req.cookies["username"]
