@@ -59,7 +59,6 @@ app.get("/register", (req, res) => {
 
 // request to post data to /register
 app.post("/register", (req, res) => {
-  console.log('sup');
   // req.body={email:____, password: ____}
   // let shortUrl = req.params.id;
   // urlDatabase[shortUrl] = req.body.newURL;
