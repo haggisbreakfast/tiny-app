@@ -119,10 +119,34 @@ app.post("/urls/:id/update", (req, res) => {
 
 // handle login request
 app.post("/login", (req, res) => {
-  // set cookie to be called user_id to value submitted
-  res.cookie("user_id", req.body.user_id);
-  // redirect to /urls page after
-  res.redirect("/urls")
+  // grab email and password inputs from user
+  let inputEmail = req.body.email;
+  let inputPassword = req.body.password;
+  // loop thru each property in users object
+  let user;
+  for (let property in users) {
+    // check if email exists
+    if (inputEmail === users[property].email) {
+      user = users[property];
+    }
+  }
+  if (user) {
+    // check if passwords match
+    if (inputPassword === user.password) {
+      res.cookie("user_id", user.id);
+      // redirect to /urls page after
+      res.redirect("/urls")
+      // if password no match, too bad
+    } else {
+      res.status(403).send("add msg l88888r")
+      return
+    }
+    // if email doesnt exist, too bad
+  } else {
+    res.status(403).send("add msg l8r")
+    return
+  }
+
 });
 
 // request to post data to /register
