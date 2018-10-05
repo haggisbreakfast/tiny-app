@@ -73,9 +73,17 @@ app.post("/register", (req, res) => {
     password: password
   };
   console.log(users);
+  // conditional statement for handling registration errors
+  if (!email || !password) {
+    res.status(400).send("Please enter email and password");
+  }
+  for (var i in users) {
+    if (users[randomId].email === users[i].email) {
+      res.status(400).send("Email already assigned to a User ID.");
+    }
+  }
   // set cookies
   res.cookie("user_id", users[randomId]);
-
   res.redirect("/urls")
 })
 
