@@ -10,6 +10,8 @@
 </head>
 
 <body>
+  <!-- if user is logged in then display URLS else prompt to login or register first -->
+  <% if (user_id) { %>
   <!-- display list of URLS and shortened form -->
   <h1>URLS</h1>
   <ul>
@@ -21,9 +23,12 @@
       <a href='<%= urls[i].longURL %>'>
         <%= urls[i].longURL %> </a>
       <!-- i = shortURLS -->
-      <%= i %>
-      <!-- add edit links for each  -->
-      <a href="/urls/<%=i%>"> Edit </a>
+      <a href="localhost:8080/u/">
+        <%= i %></a>
+      <!-- add edit links for each (changed from <a> to <button>) -->
+      <form method="GET" action="/urls/<%=i%>">
+        <button type="submit" class="btn btn-primary">Edit</button>
+      </form>
 
       <!-- adding delete button form -->
       <form method="POST" action="/urls/<%=i%>/delete">
@@ -33,6 +38,9 @@
     </li>
     <% } %>
   </ul>
+  <% } else { %>
+  <h3>Please Login or Register first to see your URLs</h3>
+  <% } %>
 </body>
 
 </html>

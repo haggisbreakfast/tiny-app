@@ -8,22 +8,25 @@
   <title>SHORT URL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<h1>
-  SHORT URL
-</h1>
-<!-- let templateVars = {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
-    user_id: users[req.cookies["user_id"]],
-  }; -->
-<!-- update operation - update existing shortened urls  -->
-<form method="POST" action="/urls/<%=shortURL%>/update">
-  <!-- input for update button -->
-  <input type="text" value="<%= longURL %>" name="newURL" />
-  <button type="submit" class="btn btn-primary">Update</button>
-</form>
 
 <body>
+  <% if (user_id) { %>
+
+  <h1>
+    SHORT URL
+  </h1>
+
+  <!-- let templateVars = {
+      shortURL: req.params.id,
+      longURL: urlDatabase[req.params.id],
+      user_id: users[req.cookies["user_id"]],
+    }; -->
+  <!-- update operation - update existing shortened urls  -->
+  <form method="POST" action="/urls/<%=shortURL%>/update">
+    <!-- input for update button -->
+    <input type="text" value="<%= longURL %>" name="newURL" />
+    <button type="submit" class="btn btn-primary">Update</button>
+  </form>
   <ul>
     <li> Long URL:
       <%=longURL%>
@@ -33,6 +36,10 @@
     </li>
 
   </ul>
+  <% } else { %>
+  <h3>Please Login or Register first to edit your URL </h3>
+  <%}%>
+
 </body>
 
 </html>

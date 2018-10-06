@@ -24,6 +24,18 @@ function generateRandomString(digits) {
 };
 console.log(generateRandomString(6));
 
+function urlsForUser(id) {
+  let userUrlDatabase = {};
+  for (let key in urlDatabase) {
+    if (id === urlDatabase[key].userID) {
+      userUrlDatabase[key] = urlDatabase[key]
+    }
+  }
+  return userUrlDatabase;
+};
+
+
+
 // define url database with short url/long url key value pairs
 let urlDatabase = {
   "BnfXle": { longURL: "http://www.facebook.com", userID: "userRandomID" },
@@ -54,7 +66,7 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
   // pass URL database to template
   let templateVars = {
-    urls: urlDatabase,
+    urls: urlsForUser(req.cookies["user_id"]),
     user_id: users[req.cookies["user_id"]]
   };
   res.render("urls_index", templateVars);
@@ -77,23 +89,21 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
+    longURL: urlDatabase[req.params.id].longURL,
     user_id: users[req.cookies["user_id"]],
   };
-  if (urlDatabase[req.params.id].userID === req.cookies["user_id"]) {
-    console.log("yes ok");
+  if (req.cookies["user_id"] === urlDatabase[req.params.id].userID) {
     res.render("urls_show", templateVars);
   } else {
-    res.redirect("/urls");
+    // change later?
+    res.send("This is not your URL.")
   }
 });
-
-
 
 // redirect request
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
-  let longURL = urlDatabase[shortURL];
+  let longURL = urlDatabase[shortURL].longURL;
   // redirect to long URL
   res.redirect(longURL);
 });
@@ -138,9 +148,12 @@ app.post("/urls/:id/delete", (req, res) => {
 // handle update button
 app.post("/urls/:id/update", (req, res) => {
   let shortUrl = req.params.id;
-  console.log("shortUrl");
-  urlDatabase[shortUrl] = req.body.newURL;
-  res.redirect("/urls");
+  if (urlDatabase[req.params.id].userID === req.cookies["user_id"]) {
+    urlDatabase[shortUrl].longURL = req.body.newURL;
+    res.redirect("/urls")
+  } else {
+    res.status(403).send("FORBIDDEN.");
+  }
 })
 
 // handle login request
