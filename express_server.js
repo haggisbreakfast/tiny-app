@@ -26,9 +26,9 @@ console.log(generateRandomString(6));
 
 // define url database with short url/long url key value pairs
 let urlDatabase = {
-  "BnfXle": "http://www.facebook.com",
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "BnfXle": { longURL: "http://www.facebook.com", userID: "userRandomID" },
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "user2RandomID" },
+  "9sm5xK": { longURL: "http://www.google.com", userID: "user2RandomID" }
 };
 
 // add user database
@@ -107,13 +107,18 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login");
 });
-// handles submitted URLs
+// ****************************************    handles submitted new URLs from urls/new ***********************
 app.post("/urls", (req, res) => {
   //capture the long URL :
-  console.log("we are in app.post");
+  console.log('A Thing', urlDatabase);
   let longURL = req.body.longURL;
-  let shortURL = generateRandomString();
-  urlDatabase[shortURL] = longURL;
+  let shortURL = generateRandomString(6);
+  // urlDatabase[shortURL] = longURL;
+  urlDatabase[shortURL] = {
+    longURL: longURL,
+    userID: req.cookies["user_id"]
+  }
+  console.log(urlDatabase);
   res.redirect("/urls");
 });
 
