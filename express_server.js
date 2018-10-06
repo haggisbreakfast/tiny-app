@@ -3,6 +3,8 @@ const app = express();
 const PORT = 8080;
 const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser");
+const bcrypt = require('bcrypt');
+
 
 app.set("view engine", "ejs");
 app.use(cookieParser());
@@ -213,7 +215,7 @@ app.post("/register", (req, res) => {
   users[userID] = {
     id: userID,
     email: email,
-    password: password
+    password: bcrypt.hashSync(password, 10);
   };
   // set cookies
   res.cookie("user_id", userID);
