@@ -57,8 +57,6 @@ app.get("/urls", (req, res) => {
     urls: urlDatabase,
     user_id: users[req.cookies["user_id"]]
   };
-  console.log("before rendering on index page")
-  console.log(urlDatabase);
   res.render("urls_index", templateVars);
 });
 // route to render urls/new page
@@ -82,7 +80,12 @@ app.get("/urls/:id", (req, res) => {
     longURL: urlDatabase[req.params.id],
     user_id: users[req.cookies["user_id"]],
   };
-  res.render("urls_show", templateVars);
+  if (urlDatabase[req.params.id].userID === req.cookies["user_id"]) {
+    console.log("yes ok");
+    res.render("urls_show", templateVars);
+  } else {
+    res.redirect("/urls");
+  }
 });
 
 
@@ -110,7 +113,6 @@ app.get("/login", (req, res) => {
 // ****************************************    handles submitted new URLs from urls/new ***********************
 app.post("/urls", (req, res) => {
   //capture the long URL :
-  console.log('A Thing', urlDatabase);
   let longURL = req.body.longURL;
   let shortURL = generateRandomString(6);
   // urlDatabase[shortURL] = longURL;
@@ -118,19 +120,25 @@ app.post("/urls", (req, res) => {
     longURL: longURL,
     userID: req.cookies["user_id"]
   }
-  console.log(urlDatabase);
   res.redirect("/urls");
 });
 
 // // handle delete form in urls_index.ejs
 app.post("/urls/:id/delete", (req, res) => {
-  delete urlDatabase[req.params.id]
-  res.redirect("/urls");
+  // urlDatabase[shortURL] = longURL;
+  // if long url clicked on check if current user === user id in database
+  // req.params.id = short url
+  // if the userID at that short url is current username then allow delete
+  if (urlDatabase[req.params.id].userID === req.cookies["user_id"]) {
+    delete urlDatabase[req.params.id]
+    res.redirect("/urls");
+  }
 })
 
 // handle update button
 app.post("/urls/:id/update", (req, res) => {
   let shortUrl = req.params.id;
+  console.log("shortUrl");
   urlDatabase[shortUrl] = req.body.newURL;
   res.redirect("/urls");
 })
