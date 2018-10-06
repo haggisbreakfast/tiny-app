@@ -50,12 +50,12 @@ const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    hashedPassword: bcrypt.hashSync("purple-monkey-dinosaur", 10)
   },
   "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    hashedPassword: bcrypt.hashSync("dishwasher-funk", 10)
   }
 };
 
@@ -173,7 +173,8 @@ app.post("/login", (req, res) => {
   }
   if (user) {
     // check if passwords match
-    if (inputPassword === user.password) {
+    if (bcrypt.compareSync(inputPassword, user.hashedPassword)) {
+      console.log("went in", user.hashedPassword)
       res.cookie("user_id", user.id);
       // redirect to /urls page after
       res.redirect("/urls")
@@ -192,11 +193,6 @@ app.post("/login", (req, res) => {
 
 // request to post data to /register
 app.post("/register", (req, res) => {
-  // req.body={email:____, password: ____}
-  // let shortUrl = req.params.id;
-  // urlDatabase[shortUrl] = req.body.newURL;
-  // console.log(req.params.body); = UNDEFINED
-  // console.log(req.body.email); = EMAIL
   let email = req.body.email;
   let password = req.body.password;
   let userID = generateRandomString(6);
@@ -215,8 +211,9 @@ app.post("/register", (req, res) => {
   users[userID] = {
     id: userID,
     email: email,
-    password: bcrypt.hashSync(password, 10);
+    hashedPassword: bcrypt.hashSync(password, 10)
   };
+  console.log("hashed password", users[userID].hashedPassword);
   // set cookies
   res.cookie("user_id", userID);
   res.redirect("/urls")
