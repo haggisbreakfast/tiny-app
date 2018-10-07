@@ -98,6 +98,8 @@ app.get("/urls/:id", (req, res) => {
   };
   if (req.session.user_id === urlDatabase[req.params.id].userID) {
     res.render("urls_show", templateVars);
+  } else if (!req.session.user_id) {
+    res.send("Please login first")
   } else {
     // change later?
     res.send("This is not your URL.")
