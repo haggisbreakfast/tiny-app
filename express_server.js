@@ -38,15 +38,12 @@ function urlsForUser(id) {
   return userUrlDatabase;
 };
 
-
-
 // define url database with short url/long url key value pairs
 let urlDatabase = {
   "BnfXle": { longURL: "http://www.facebook.com", userID: "userRandomID" },
   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "user2RandomID" },
   "9sm5xK": { longURL: "http://www.google.com", userID: "user2RandomID" }
 };
-
 // add user database
 const users = {
   "userRandomID": {
@@ -101,7 +98,6 @@ app.get("/urls/:id", (req, res) => {
   } else if (!req.session.user_id) {
     res.send("Please login first")
   } else {
-    // change later?
     res.send("This is not your URL.")
   }
 });
