@@ -105,8 +105,7 @@ app.get("/urls/:id", (req, res) => {
     res.send("This is not your URL.")
   }
 });
-
-// redirect request
+// redirect to longURL request
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   let longURL = urlDatabase[shortURL].longURL;
@@ -182,7 +181,6 @@ app.post("/login", (req, res) => {
   if (user) {
     // check if passwords match
     if (bcrypt.compareSync(inputPassword, user.hashedPassword)) {
-      console.log("went in", user.hashedPassword)
       req.session.user_id = user.id;
       // redirect to /urls page after
       res.redirect("/urls")
@@ -221,9 +219,7 @@ app.post("/register", (req, res) => {
     email: email,
     hashedPassword: bcrypt.hashSync(password, 10)
   };
-  console.log("hashed password", users[userID].hashedPassword);
   // set cookies
-  // res.cookie("user_id", userID);
   req.session.user_id = userID
   res.redirect("/urls")
 })
@@ -242,7 +238,6 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
 });
 
 // let urlDatabase = req.body.longURL;
