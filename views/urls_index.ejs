@@ -41,6 +41,12 @@
   <% } else { %>
   <h3>Please Login or Register first to see your URLs</h3>
   <% } %>
+  <!-- create new button -->
+  <% if (user_id) { %>
+  <form method="GET" action="/urls/new">
+    <button type="submit" class="btn btn-primary">Create New Short URL</button>
+  </form>
+  <% } %>
 </body>
 
 </html>

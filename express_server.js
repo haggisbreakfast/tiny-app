@@ -124,6 +124,10 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login");
 });
+// render urls/new page when create new button pressed
+app.get("/urls/new", (res, req) => {
+  res.render("/urls/new")
+});
 // ****************************************    handles submitted new URLs from urls/new ***********************
 app.post("/urls", (req, res) => {
   //capture the long URL :
