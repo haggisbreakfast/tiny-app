@@ -18,5 +18,5 @@ Run the development web server using the `node express_server.js` command.
 
 ## Final Product
 
-![Screenshot of Create New Short URL page] (https://github.com/haggisbreakfast/tiny-app/blob/master/docs/create-new-shortURL-page.png?raw=true)
-![Screenshot of URLs Page] (https://github.com/haggisbreakfast/tiny-app/blob/master/docs/urls-page.png?raw=true)
+![Screenshot of Create New Short URL page](https://github.com/haggisbreakfast/tiny-app/blob/master/docs/create-new-shortURL-page.png?raw=true)
+![Screenshot of URLs Page](https://github.com/haggisbreakfast/tiny-app/blob/master/docs/urls-page.png?raw=true)
