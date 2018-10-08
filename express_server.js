@@ -10,12 +10,10 @@ app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2']
 }));
-
 // body parser
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
 // Generate random string function
 function generateRandomString(digits) {
   //Solution from https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
@@ -26,7 +24,6 @@ function generateRandomString(digits) {
   };
   return string;
 };
-
 function urlsForUser(id) {
   let userUrlDatabase = {};
   for (let key in urlDatabase) {
@@ -36,7 +33,6 @@ function urlsForUser(id) {
   }
   return userUrlDatabase;
 };
-
 // define url database with short url,long url key value pairs,userID
 let urlDatabase = {
   "BnfXle": { longURL: "http://www.facebook.com", userID: "userRandomID" },
@@ -56,13 +52,11 @@ const users = {
     hashedPassword: bcrypt.hashSync("dishwasher-funk", 10)
   }
 };
-
 // ************** ROUTES ****************
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  res.redirect("/urls");
 });
-
-// add route for /urls page
+// add route to /urls page
 app.get("/urls", (req, res) => {
   // pass URL database to template
   let templateVars = {
@@ -71,14 +65,14 @@ app.get("/urls", (req, res) => {
   };
   res.render("urls_index", templateVars);
 });
-// route to render urls/new page
+// route to urls/new page
 app.get("/urls/new", (req, res) => {
   let templateVars = {
     user_id: users[req.session.user_id]
   }
   // if user exists and is logged in
   if (users[req.session.user_id]) {
-    // then render urls_new page
+    //render urls_new page
     res.render("urls_new", templateVars);
   } else {
     // otherwise direct to login page
@@ -92,23 +86,26 @@ app.get("/urls/:id", (req, res) => {
     longURL: urlDatabase[req.params.id].longURL,
     user_id: users[req.session.user_id],
   };
+  // if userID entered exists in database
   if (req.session.user_id === urlDatabase[req.params.id].userID) {
+    // render URLs
     res.render("urls_show", templateVars);
   } else if (!req.session.user_id) {
+    // otherwise prompt login
     res.send("Please login first")
   } else {
+    // if URL does not belong to user send message
     res.send("This is not your URL.")
   }
 });
-// redirect to longURL request
+// redirect to longURL
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   let longURL = urlDatabase[shortURL].longURL;
-  // redirect to long URL
   res.redirect(longURL);
 });
 
-// get registration page request
+// route to registration page
 app.get("/register", (req, res) => {
   let templateVars = {
     user_id: req.session.user_id
@@ -116,7 +113,7 @@ app.get("/register", (req, res) => {
   // return registration page w/ empty form
   res.render("registration", templateVars);
 });
-
+// route to login page
 app.get("/login", (req, res) => {
   res.render("login");
 });
@@ -124,14 +121,13 @@ app.get("/login", (req, res) => {
 app.get("/urls/new", (res, req) => {
   res.render("/urls/new")
 });
-// ****************************************    handles submitted new URLs from urls/new ***********************
+// handles submitted new URLs from urls/new
 app.post("/urls", (req, res) => {
-  //capture the long URL :
+  //grab long URL
   let longURL = req.body.longURL;
   let shortURL = generateRandomString(6);
   // attempted terniary operator successfully to ensure each new longURL contains http://
   let validURL = longURL.match('http://') ? longURL : "http://" + longURL;
-
   urlDatabase[shortURL] = {
     longURL: validURL,
     userID: req.session.user_id
@@ -139,7 +135,7 @@ app.post("/urls", (req, res) => {
   res.redirect("/urls");
 });
 
-// // handle delete form in urls_index.ejs
+// // handle delete form
 app.post("/urls/:id/delete", (req, res) => {
   if (urlDatabase[req.params.id].userID === req.session.user_id) {
     delete urlDatabase[req.params.id]
@@ -156,7 +152,6 @@ app.post("/urls/:id/update", (req, res) => {
     res.status(403).send("FORBIDDEN.");
   }
 })
-
 // handle login request
 app.post("/login", (req, res) => {
   // grab email and password inputs from user
@@ -176,7 +171,7 @@ app.post("/login", (req, res) => {
       req.session.user_id = user.id;
       // redirect to /urls page after
       res.redirect("/urls")
-      // if password no match, too bad
+      // if password don't match return error
     } else {
       res.status(403).send("incorrect password!")
       return
@@ -218,14 +213,10 @@ app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/urls")
 });
-
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
+
 app.listen(PORT, () => {
 });
 
-// let urlDatabase = req.body.longURL;

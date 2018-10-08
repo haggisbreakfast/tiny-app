@@ -10,13 +10,12 @@
 </head>
 
 <body>
-  <!-- if user is logged in then display URLS else prompt to login or register first -->
+  <!-- if user is logged in then display URLS otherwise prompt to login or register first -->
   <% if (user_id) { %>
   <!-- display list of URLS and shortened form -->
   <h1>URLS</h1>
   <ul>
     <!-- loop over url object -->
-    <!-- urls = urlDatabase -->
     <% for (var i in urls) { %>
     <li>
       <!-- link long url -->
@@ -26,7 +25,7 @@
       <!-- i = shortURLS -->
       <a href="/u/<%=i%>">
         <%= i %></a>
-      <!-- add edit links for each (changed from <a> to <button>) -->
+      <!-- adding edit button -->
       <form method="GET" action="/urls/<%=i%>">
         <button type="submit" class="btn btn-primary">Edit</button>
       </form>

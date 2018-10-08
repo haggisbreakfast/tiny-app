@@ -14,12 +14,7 @@
   <h1>
     SHORT URL
   </h1>
-  <!-- let templateVars = {
-      shortURL: req.params.id,
-      longURL: urlDatabase[req.params.id],
-      user_id: users[req.cookies["user_id"]],
-    }; -->
-  <!-- update operation - update existing shortened urls  -->
+  <!-- update existing shortened urls  -->
   <form method="POST" action="/urls/<%=shortURL%>/update">
     <!-- input for update button -->
     <input type="text" value="<%= longURL %>" name="newURL" />

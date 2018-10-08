@@ -9,25 +9,18 @@
 </head>
 
 <body>
-  <!-- <form method="GET" action="/register">
-    <input type="email" name="email" />
-    <input type="password" name="password" />
-    <button type="submit" class="btn btn-primary">Go!</button>
-  </form> -->
-
-
   <!-- if user_id form filled out, display user_id -->
   <h1>
     <%if (user_id) { %>
     <%= user_id["email"] %>
     <form method="POST" action="/logout">
-      <!-- input for logout button -->
+      <!-- logout button -->
       <button type="submit" class="btn btn-primary">logout</button>
     </form>
     <% } else { %>
   </h1>
 
-  <!-- REGISTER BUTTON  -->
+  <!-- register button -->
   <form method="GET" action="/register">
     <button type="submit" class="btn btn-primary">REGISTER</button>
   </form>
