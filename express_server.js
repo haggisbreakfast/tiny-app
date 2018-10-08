@@ -156,7 +156,9 @@ app.post("/urls/:id/delete", (req, res) => {
 app.post("/urls/:id/update", (req, res) => {
   let shortUrl = req.params.id;
   if (urlDatabase[req.params.id].userID === req.session.user_id) {
-    urlDatabase[shortUrl].longURL = req.body.newURL;
+    let longURL = req.body.newURL;
+    let validURL = longURL.match('http://') ? longURL : "http://" + longURL;
+    urlDatabase[shortUrl].longURL = validURL;
     res.redirect("/urls")
   } else {
     res.status(403).send("FORBIDDEN.");
