@@ -24,6 +24,7 @@ function generateRandomString(digits) {
   };
   return string;
 };
+
 function urlsForUser(id) {
   let userUrlDatabase = {};
   for (let key in urlDatabase) {
@@ -35,9 +36,18 @@ function urlsForUser(id) {
 };
 // define url database with short url,long url key value pairs,userID
 let urlDatabase = {
-  "BnfXle": { longURL: "http://www.facebook.com", userID: "userRandomID" },
-  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "user2RandomID" },
-  "9sm5xK": { longURL: "http://www.google.com", userID: "user2RandomID" }
+  "BnfXle": {
+    longURL: "http://www.facebook.com",
+    userID: "userRandomID"
+  },
+  "b2xVn2": {
+    longURL: "http://www.lighthouselabs.ca",
+    userID: "user2RandomID"
+  },
+  "9sm5xK": {
+    longURL: "http://www.google.com",
+    userID: "user2RandomID"
+  }
 };
 // add user database
 const users = {
@@ -217,6 +227,4 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-app.listen(PORT, () => {
-});
-
+app.listen(PORT, () => {});
