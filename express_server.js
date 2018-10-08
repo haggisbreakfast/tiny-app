@@ -26,7 +26,6 @@ function generateRandomString(digits) {
   };
   return string;
 };
-console.log(generateRandomString(6));
 
 function urlsForUser(id) {
   let userUrlDatabase = {};
@@ -38,7 +37,7 @@ function urlsForUser(id) {
   return userUrlDatabase;
 };
 
-// define url database with short url/long url key value pairs
+// define url database with short url,long url key value pairs,userID
 let urlDatabase = {
   "BnfXle": { longURL: "http://www.facebook.com", userID: "userRandomID" },
   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "user2RandomID" },
@@ -130,9 +129,11 @@ app.post("/urls", (req, res) => {
   //capture the long URL :
   let longURL = req.body.longURL;
   let shortURL = generateRandomString(6);
-  // urlDatabase[shortURL] = longURL;
+  // attempted terniary operator successfully to ensure each new longURL contains http://
+  let validURL = longURL.match('http://') ? longURL : "http://" + longURL;
+
   urlDatabase[shortURL] = {
-    longURL: longURL,
+    longURL: validURL,
     userID: req.session.user_id
   }
   res.redirect("/urls");
@@ -140,16 +141,11 @@ app.post("/urls", (req, res) => {
 
 // // handle delete form in urls_index.ejs
 app.post("/urls/:id/delete", (req, res) => {
-  // urlDatabase[shortURL] = longURL;
-  // if long url clicked on check if current user === user id in database
-  // req.params.id = short url
-  // if the userID at that short url is current username then allow delete
   if (urlDatabase[req.params.id].userID === req.session.user_id) {
     delete urlDatabase[req.params.id]
     res.redirect("/urls");
   }
 })
-
 // handle update button
 app.post("/urls/:id/update", (req, res) => {
   let shortUrl = req.params.id;
@@ -185,14 +181,12 @@ app.post("/login", (req, res) => {
       res.status(403).send("incorrect password!")
       return
     }
-    // if email doesnt exist, too bad
+    // if email doesnt exist, return error message
   } else {
     res.status(403).send("non-existent email entered!")
     return
   }
-
 });
-
 // request to post data to /register
 app.post("/register", (req, res) => {
   let email = req.body.email;
@@ -219,13 +213,11 @@ app.post("/register", (req, res) => {
   req.session.user_id = userID
   res.redirect("/urls")
 })
-
 // handle logout request
 app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/urls")
 });
-
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);

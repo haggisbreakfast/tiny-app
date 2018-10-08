@@ -21,9 +21,10 @@
     <li>
       <!-- link long url -->
       <a href='<%= urls[i].longURL %>'>
-        <%= urls[i].longURL %> </a>
+        <%= urls[i].longURL %></a>
+      <span> </span>
       <!-- i = shortURLS -->
-      <a href="localhost:8080/u/">
+      <a href="/u/<%=i%>">
         <%= i %></a>
       <!-- add edit links for each (changed from <a> to <button>) -->
       <form method="GET" action="/urls/<%=i%>">
